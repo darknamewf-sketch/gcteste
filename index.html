@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f"><title>GC Studio Mobile — Vale TV</title>
+<link rel="stylesheet" href="css/styles.css"></head><body>
+<header><div class="tag">FERRAMENTA CRIATIVA • MOBILE • VALE TV</div><h1>GC Studio</h1>
+<p>Editor profissional de tarjas para TV e redes sociais. Personalize, anime e exporte pelo navegador.</p></header>
+<main class="wrap">
+<!-- ===== PRÉVIA, LINHA DO TEMPO E EXPORTAÇÃO ===== -->
+<section class="panel preview-panel" aria-label="Pré-visualização">
+<h2 class="section-title">Pré-visualização ao vivo</h2>
+<div class="preview" id="preview"><canvas id="canvas" width="1920" height="1080" role="img" aria-label="Prévia do GC"></canvas></div>
+<div class="timeline">
+<div class="tlbar" id="tlbar"></div>
+<input id="scrub" type="range" min="0" max="5" step="0.01" value="0" aria-label="Linha do tempo: arraste para ver um instante da animação">
+<div class="tltxt"><span id="tlTime">0.0 s</span><span id="tlPhase">Entrada</span></div>
+<div class="legend"><i class="in"></i>Entrada <i class="hold"></i>Permanência <i class="out"></i>Saída</div>
+</div>
+<div class="actions">
+<button id="play">▶ Reproduzir</button><button id="pause" class="secondary">⏸ Pausar</button>
+<button id="png" class="secondary">Salvar PNG transparente</button><button id="webm">Exportar vídeo</button>
+<button id="reset" class="secondary full">Restaurar modelo</button></div>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+<div class="notice"><b>Exportação:</b> o PNG preserva transparência. O vídeo transparente só funciona em navegadores que gravam WebM com alfa (normalmente Chrome/Edge no computador ou Android). O app verifica o arquivo após gravar e avisa se o alfa foi perdido. Nesse caso use o <b>fundo sólido</b> (verde chroma ou outra cor) e remova a cor no editor (CapCut: Chroma Key).</div>
+<div class="notice" id="caps" aria-live="polite"></div>
+<p class="hint">O quadriculado indica transparência e não é exportado. As linhas tracejadas (margens) também não são exportadas.</p>
+</section>
+<!-- ===== CONTROLES ===== -->
+<section class="panel"><h2 class="section-title">Personalizar o GC</h2>
+<fieldset><legend>Modelo e formato</legend><div class="controls">
+<div class="field full"><label for="template">Modelo pronto</label><select id="template">
+<option value="vale-news">Vale TV • Jornalístico azul</option><option value="vale-urgent">Vale TV • Plantão / urgente</option>
+<option value="vale-sport">Vale TV • Esportivo</option><option value="vale-minimal">Vale TV • Minimalista</option>
+<option value="social">Redes sociais • Chamada vertical</option></select></div>
+<div class="field"><label for="ratio">Formato de vídeo</label><select id="ratio"><option value="landscape">16:9 — TV / YouTube</option><option value="portrait">9:16 — Reels / Shorts / Stories</option></select></div>
+<div class="field"><label for="safe">Margem de segurança</label><select id="safe">
+<option value="auto">Automática (TV 16:9 / Reels 9:16)</option><option value="tv">TV (área de título 90%)</option><option value="youtube">YouTube</option>
+<option value="reels">Instagram Reels</option><option value="shorts">YouTube Shorts</option><option value="stories">Stories</option><option value="none">Sem margem</option></select></div>
+<div class="field full"><label class="check"><input id="showGuides" type="checkbox"> Mostrar guias de margem na prévia (valores aproximados; confirme na plataforma)</label></div>
+</div></fieldset>
+<fieldset><legend>Texto</legend><div class="controls">
+<div class="field full"><label for="headline">Manchete / nome</label><input id="headline" type="text" maxlength="70" value="NOME DO APRESENTADOR"></div>
+<div class="field full"><label for="sub">Cargo ou informação secundária</label><input id="sub" type="text" maxlength="90" value="JORNALISTA • VALE TV"></div>
+<div class="field"><label for="tagline">Selo / etiqueta</label><input id="tagline" type="text" maxlength="20" value="AO VIVO"></div>
+<div class="field"><label for="style">Estilo gráfico</label><select id="style"><option value="news">Jornalístico</option><option value="minimal">Minimalista</option><option value="sport">Esportivo</option><option value="breaking">Urgente / plantão</option><option value="social">Redes sociais</option></select></div>
+</div></fieldset>
+<fieldset><legend>Aparência e posição</legend><div class="controls">
+<div class="field"><label for="primary">Cor principal</label><input id="primary" type="color" value="#0879d9"></div>
+<div class="field"><label for="accent">Cor de destaque</label><input id="accent" type="color" value="#42c5ff"></div>
+<div class="field"><label for="position">Posição</label><select id="position"><option value="bottom">Inferior</option><option value="top">Superior</option><option value="center">Centro</option></select></div>
+<div class="field"><label for="scale">Tamanho <span data-val="scale" data-unit="%"></span></label><input id="scale" type="range" min="55" max="120" value="100"></div>
+<div class="field"><label for="offsetX">Ajuste horizontal <span data-val="offsetX" data-unit="%"></span></label><input id="offsetX" type="range" min="-20" max="20" value="0"></div>
+<div class="field"><label for="offsetY">Ajuste vertical <span data-val="offsetY" data-unit="%"></span></label><input id="offsetY" type="range" min="-20" max="20" value="0"></div>
+<div class="field full"><label class="check"><input id="showAccent" type="checkbox" checked> Mostrar linha de destaque</label>
+<label class="check"><input id="showBadge" type="checkbox" checked> Mostrar selo ao vivo / etiqueta</label>
+<label class="check"><input id="showLogoText" type="checkbox" checked> Mostrar marca Vale TV quando não houver logotipo</label></div>
+</div></fieldset>
+<fieldset><legend>Animação e tempo</legend><div class="controls">
+<div class="field"><label for="duration">Duração total</label><select id="duration"><option value="3">3 segundos</option><option value="5" selected>5 segundos</option><option value="8">8 segundos</option><option value="10">10 segundos</option><option value="15">15 segundos</option></select></div>
+<div class="field"><label for="idle">Permanência</label><select id="idle"><option value="none">Estática</option><option value="pulse">Pulsar destaque</option><option value="shine">Brilho deslizante</option></select></div>
+<div class="field"><label for="animIn">Animação de entrada</label><select id="animIn"></select></div>
+<div class="field"><label for="animOut">Animação de saída</label><select id="animOut"></select></div>
+<div class="field"><label for="tIn">Duração da entrada <span data-val="tIn" data-unit=" s"></span></label><input id="tIn" type="range" min="0.2" max="3" step="0.1" value="0.8"></div>
+<div class="field"><label for="tOut">Duração da saída <span data-val="tOut" data-unit=" s"></span></label><input id="tOut" type="range" min="0.2" max="3" step="0.1" value="0.8"></div>
+</div></fieldset>
+<fieldset><legend>Exportação</legend><div class="controls">
+<div class="field"><label for="quality">Qualidade de gravação</label><select id="quality"><option value="4">Padrão — 4 Mbps</option><option value="8" selected>Alta — 8 Mbps</option><option value="12">Muito alta — 12 Mbps</option></select></div>
+<div class="field"><label for="bgMode">Fundo do vídeo</label><select id="bgMode"><option value="transparent">Transparente (se suportado)</option><option value="green">Verde chroma (alternativa)</option><option value="black">Preto sólido</option><option value="custom">Cor personalizada</option></select></div>
+<div class="field"><label for="bgColor">Cor do fundo personalizado</label><input id="bgColor" type="color" value="#00ff00"></div>
+</div></fieldset>
+<fieldset><legend>Logotipo</legend><div class="controls"><div class="field full"><label for="logo">Adicionar logotipo (PNG transparente recomendado)</label>
+<input id="logo" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></div>
+<div class="field full"><button id="clearLogo" class="secondary">Remover logotipo</button></div></div></fieldset>
+<div class="actions"><button id="saveSettings">Salvar configuração (.json)</button><button id="loadSettings" class="secondary">Carregar configuração</button>
+<input id="settingsFile" type="file" accept="application/json,.json" hidden></div>
+<p class="hint">O logotipo é processado localmente e não é enviado para servidor.</p>
+</section></main>
+<div class="foot">GC Studio Mobile • Vale TV • transparência e gravação dependem do navegador</div>
+<script src="js/app.js"></script></body></html>
